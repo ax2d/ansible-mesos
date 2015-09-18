@@ -5,8 +5,8 @@ Description=mesos slave
 
 [Service]
 Type=simple
-User=mesos
-Group=mesos
+User=root
+Group=root
 ExecStart=/usr/bin/mesos-init-wrapper slave
 TimeoutSec=300
 
