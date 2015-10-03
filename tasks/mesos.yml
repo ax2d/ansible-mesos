@@ -35,22 +35,6 @@
   notify:
     - Restart mesos-slave
 
-- name: Check if upstart exists
-  stat: path=/etc/init/
-  register: etc_init
-
-- name: Mesos master upstart script
-  template: src=init-mesos-master.j2 dest=/etc/init/mesos-master.conf
-  when: (mesos_install_mode == "master" or mesos_install_mode == "master-slave") and etc_init.stat.exists == true
-  notify:
-    - Restart mesos-master
-
-- name: Mesos slave upstart script
-  template: src=init-mesos-slave.j2 dest=/etc/init/mesos-slave.conf
-  when: (mesos_install_mode == "slave" or mesos_install_mode == "master-slave") and etc_init.stat.exists == true
-  notify:
-    - Restart mesos-slave
-    
 - name: Check if systemd exists
   stat: path=/usr/lib/systemd/system/
   register: systemd_check
@@ -61,9 +45,16 @@
   notify:
     - Restart mesos-master
 
+- name: Make sure mesos-master is running
+  when: (mesos_install_mode == "master" or mesos_install_mode == "master-slave")
+  service: name=mesos-master state=started enabled=yes
+
 - name: Mesos slave systemd script
   template: src=mesos-slave.service.j2 dest=/usr/lib/systemd/system/mesos-slave.service
   when: (mesos_install_mode == "slave" or mesos_install_mode == "master-slave") and systemd_check.stat.exists == true
   notify:
     - Restart mesos-slave
 
+- name: Make sure mesos is running
+  when: (mesos_install_mode == "slave" or mesos_install_mode == "master-slave")
+  service: name=mesos-slave state=started enabled=yes
