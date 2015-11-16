@@ -21,7 +21,10 @@ mesos_containerizers: "docker,mesos"
 mesos_executor_timeout: "5mins"
 
 # Additional configurations
-mesos_additional_configs: []
+mesos_additional_configs:
+  - name: DOCKER_STOP_TIMEOUT
+    value: "45secs"
+
   # For example:
   # - name: FOO
   #   value: bar
