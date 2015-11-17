@@ -1,4 +1,8 @@
 ---
+- name: clear out work dir
+  file: path={{ mesos_work_dir }} state=absent
+  when: mesos_init_work_dir
+
 # == Work Dir for replicated log
 - name: create work dir
   file: path={{ mesos_work_dir }} state=directory
