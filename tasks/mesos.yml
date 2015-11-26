@@ -20,6 +20,12 @@
 - name: Remove Default Mesos-Slave Config
   file: state=absent path=/etc/mesos-slave/
 
+- name: Stop and Disable Mesos-Slave service
+  when: mesos_install_mode == "master"
+  service: name=mesos-slave state=stopped enabled=no #otherwise should be master-slave
+  ignore_errors: yes
+
+
 # == Configure and recreate
 - name: Mesos default config file
   template: src=conf-mesos.j2 dest=/etc/default/mesos
