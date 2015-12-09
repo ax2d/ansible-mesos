@@ -24,7 +24,7 @@ mesos_executor_timeout: "5mins"
 # Additional configurations
 mesos_additional_configs:
   - name: DOCKER_STOP_TIMEOUT
-    value: "45secs"
+    value: "10secs"
 
   # For example:
   # - name: FOO
